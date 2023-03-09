@@ -233,6 +233,7 @@ bandit10@bandit:~$
 
 # Vemos en hexadecimal
 # cat data.txt
+# COPIAMOS Y TRAEMOS AL EQUIPO PARA EJECUTAR SCRIPT DE ABAJO
 
 # Para ver hexadecimal entendible revertimos
 # cat data.txt | xxd -r
@@ -266,6 +267,18 @@ next@next-System:~$ batcat /etc/hosts | xxd -ps | xargs | tr -d ' '
 3132372e302e302e31096c6f63616c686f73740a3132372e302e312e31096e6578742d53797374656d0a0a232054686520666f6c6c6f77696e67206c696e65732061726520646573697261626c6520666f7220495076362063617061626c6520686f7374730a3a3a3120202020206970362d6c6f63616c686f7374206970362d6c6f6f706261636b0a666530303a3a30206970362d6c6f63616c6e65740a666630303a3a30206970362d6d636173747072656669780a666630323a3a31206970362d616c6c6e6f6465730a666630323a3a32206970362d616c6c726f75746572730a
 next@next-System:~$ 
 
+
+OPERADOR AND:
+whoami && ls 
+bandit12@bandit:~$ whoami && ls 
+bandit12
+data.txt
+bandit12@bandit:~$
+
+whoami || ls 
+bandit12@bandit:~$ whoami || ls 
+bandit12
+bandit12@bandit:~$ 
 
 
 # Escript en BASH:
@@ -323,6 +336,7 @@ while [ $decompressed_file_name ]; do
   decompressed_file_name="$(7z l $decompressed_file_name 2>/dev/null | tail -n 3 | head -n 1 | awk 'NF{print $NF}')"
 done
 
+# REDIRECCIONES ESPONGE:
 
 Creamos un archivo test:
 Abrimos con nano e introduciomos:
@@ -420,4 +434,507 @@ Existen varias herramientas de recuperación de archivos que puedes utilizar, al
     PhotoRec: otra herramienta gratuita y de código abierto desarrollada por el mismo equipo que TestDisk. Aunque su nombre sugiere que está diseñada para recuperar fotos, en realidad puede recuperar una amplia variedad de archivos, incluyendo documentos de texto.
 
 Es importante que detengas cualquier escritura en el disco donde se encuentra el archivo eliminado hasta que hayas intentado recuperarlo, ya que cualquier escritura adicional puede sobrescribir los datos del archivo y hacer que sea irreparable.
+
+
+////////////////////////////////////////
+pasos por consola:
+
+next@next-System:~/prueba-bandit12$ lsd
+ data   descompresor.sh   prueba   test
+next@next-System:~/prueba-bandit12$ cat descompresor.sh 
+
+#!/bin/bash
+
+function ctrl_c(){
+  echo -e "\n\n[!] Saliendo...\n"
+  exit 1
+}
+
+# Ctrl+C
+trap ctrl_c INT
+
+first_file_name="data.gz"
+decompressed_file_name="$(7z l data.gz | tail -n 3 | head -n 1 | awk 'NF{print $NF}')"
+
+7z x $first_file_name &>/dev/null
+
+while [ $decompressed_file_name ]; do
+  echo -e "\n[+] Nuevo archivo descomprimido: $decompressed_file_name"
+  7z x $decompressed_file_name &>/dev/null
+  decompressed_file_name="$(7z l $decompressed_file_name 2>/dev/null | tail -n 3 | head -n 1 | awk 'NF{print $NF}')"
+done
+next@next-System:~/prueba-bandit12$ cat data | xxd -r
+#G���CF�=@6M@hA�22h91AY&SYSf�������n������󷭉}�g����k���;�{�;[A�1��
+4h2�hd0@�M4��z���i�&������?R24����4h� (#�"���Ϥ��qmn�D݋r`��\�h���سU��#0Ai]�j��P;�������!˖mj����c|&��~z�lT�hQH�d���q<���1�g��O� k���#M�D�=��G��x	
+�g~�(�҂�a�4
+           ��M����{LS4\��r��
+��Z��@���|C�s2ӄ��@N��ބ�Q�����F�01�6�L�Z�6��L$�KEk�!����8@������]T5��^�4ʨ<0�k]S/�� �?���fK�	��:�o���L�5�D}�$D��4
+�ܑN$٥�@C���4next@next-System:~/prueba-bandit12$ cat data | xxd -r | sponge data
+next@next-System:~/prueba-bandit12$ file data 
+data: gzip compressed data, was "data2.bin", last modified: Tue Feb 21 22:02:52 2023, max compression, from Unix, original size modulo 2^32 564
+next@next-System:~/prueba-bandit12$ strings data 
+data2.bin
+BZh91AY&SYSf
+hd0@
+?R24
+#0Ai]
+'[B0
+k]S/
+next@next-System:~/prueba-bandit12$ ghex data 
+next@next-System:~/prueba-bandit12$ mv data data.gz
+next@next-System:~/prueba-bandit12$ lsd
+ data.gz   descompresor.sh   prueba   test
+next@next-System:~/prueba-bandit12$ 7z l data.gz 
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 597 bytes (1 KiB)
+
+Listing archive: data.gz
+
+--
+Path = data.gz
+Type = gzip
+Headers Size = 20
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+2023-02-21 23:02:52 .....          564          597  data2.bin
+------------------- ----- ------------ ------------  ------------------------
+2023-02-21 23:02:52                564          597  1 files
+next@next-System:~/prueba-bandit12$ 7z x data.gz 
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 597 bytes (1 KiB)
+
+Extracting archive: data.gz
+--
+Path = data.gz
+Type = gzip
+Headers Size = 20
+
+Everything is Ok
+
+Size:       564
+Compressed: 597
+next@next-System:~/prueba-bandit12$ ls
+data2.bin  data.gz  descompresor.sh  prueba  test
+next@next-System:~/prueba-bandit12$ 7z l data2.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 564 bytes (1 KiB)
+
+Listing archive: data2.bin
+
+--
+Path = data2.bin
+Type = bzip2
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+                    .....                            data2
+------------------- ----- ------------ ------------  ------------------------
+                                                564  1 files
+next@next-System:~/prueba-bandit12$ 7x x data2.bin
+7x: orden no encontrada
+next@next-System:~/prueba-bandit12$ 7z x data2.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 564 bytes (1 KiB)
+
+Extracting archive: data2.bin
+--
+Path = data2.bin
+Type = bzip2
+
+Everything is Ok
+
+Size:       427
+Compressed: 564
+next@next-System:~/prueba-bandit12$ l
+data2  data2.bin  data.gz  descompresor.sh*  prueba  test
+next@next-System:~/prueba-bandit12$ ls
+data2  data2.bin  data.gz  descompresor.sh  prueba  test
+next@next-System:~/prueba-bandit12$ 7z x data2.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 564 bytes (1 KiB)
+
+Extracting archive: data2.bin
+--
+Path = data2.bin
+Type = bzip2
+
+
+Would you like to replace the existing file:
+  Path:     ./data2
+  Size:     427 bytes (1 KiB)
+  Modified: 2023-02-21 23:02:52
+with the file from archive:
+  Path:     data2
+? (Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? q
+
+Archives with Errors: 1
+
+
+
+Break signaled
+next@next-System:~/prueba-bandit12$ lsd
+ data.gz   data2   data2.bin   descompresor.sh   prueba   test
+next@next-System:~/prueba-bandit12$ 7z l data2.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 564 bytes (1 KiB)
+
+Listing archive: data2.bin
+
+--
+Path = data2.bin
+Type = bzip2
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+                    .....                            data2
+------------------- ----- ------------ ------------  ------------------------
+                                                564  1 files
+next@next-System:~/prueba-bandit12$ 7z x data2
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 427 bytes (1 KiB)
+
+Extracting archive: data2
+--
+Path = data2
+Type = gzip
+Headers Size = 20
+
+Everything is Ok
+
+Size:       20480
+Compressed: 427
+next@next-System:~/prueba-bandit12$ lsd
+ data.gz   data2   data2.bin   data4.bin   descompresor.sh   prueba   test
+next@next-System:~/prueba-bandit12$ 7z l data4.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 20480 bytes (20 KiB)
+
+Listing archive: data4.bin
+
+--
+Path = data4.bin
+Type = tar
+Physical Size = 20480
+Headers Size = 10240
+Code Page = UTF-8
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+2023-02-21 23:02:52 .....        10240        10240  data5.bin
+------------------- ----- ------------ ------------  ------------------------
+2023-02-21 23:02:52              10240        10240  1 files
+next@next-System:~/prueba-bandit12$ 7z x data4.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 20480 bytes (20 KiB)
+
+Extracting archive: data4.bin
+--
+Path = data4.bin
+Type = tar
+Physical Size = 20480
+Headers Size = 10240
+Code Page = UTF-8
+
+Everything is Ok
+
+Size:       10240
+Compressed: 20480
+next@next-System:~/prueba-bandit12$ lsd
+ data.gz   data2   data2.bin   data4.bin   data5.bin   descompresor.sh   prueba   test
+next@next-System:~/prueba-bandit12$ 7z l data5.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 10240 bytes (10 KiB)
+
+Listing archive: data5.bin
+
+--
+Path = data5.bin
+Type = tar
+Physical Size = 10240
+Headers Size = 9728
+Code Page = UTF-8
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+2023-02-21 23:02:52 .....          216          512  data6.bin
+------------------- ----- ------------ ------------  ------------------------
+2023-02-21 23:02:52                216          512  1 files
+next@next-System:~/prueba-bandit12$ 7z x data5.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 10240 bytes (10 KiB)
+
+Extracting archive: data5.bin
+--
+Path = data5.bin
+Type = tar
+Physical Size = 10240
+Headers Size = 9728
+Code Page = UTF-8
+
+Everything is Ok
+
+Size:       216
+Compressed: 10240
+next@next-System:~/prueba-bandit12$ ls
+data2  data2.bin  data4.bin  data5.bin  data6.bin  data.gz  descompresor.sh  prueba  test
+next@next-System:~/prueba-bandit12$ 7z l data6.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 216 bytes (1 KiB)
+
+Listing archive: data6.bin
+
+--
+Path = data6.bin
+Type = bzip2
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+                    .....                            data6
+------------------- ----- ------------ ------------  ------------------------
+                                                216  1 files
+next@next-System:~/prueba-bandit12$ 7z x data6.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 216 bytes (1 KiB)
+
+Extracting archive: data6.bin
+--
+Path = data6.bin
+Type = bzip2
+
+Everything is Ok
+
+Size:       10240
+Compressed: 216
+next@next-System:~/prueba-bandit12$ ls
+data2  data2.bin  data4.bin  data5.bin  data6  data6.bin  data.gz  descompresor.sh  prueba  test
+next@next-System:~/prueba-bandit12$ 7x l data6
+7x: orden no encontrada
+next@next-System:~/prueba-bandit12$ 7z l data6
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 10240 bytes (10 KiB)
+
+Listing archive: data6
+
+--
+Path = data6
+Type = tar
+Physical Size = 10240
+Headers Size = 9728
+Code Page = UTF-8
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+2023-02-21 23:02:52 .....           79          512  data8.bin
+------------------- ----- ------------ ------------  ------------------------
+2023-02-21 23:02:52                 79          512  1 files
+next@next-System:~/prueba-bandit12$ 7z x data6
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 10240 bytes (10 KiB)
+
+Extracting archive: data6
+--
+Path = data6
+Type = tar
+Physical Size = 10240
+Headers Size = 9728
+Code Page = UTF-8
+
+Everything is Ok
+
+Size:       79
+Compressed: 10240
+next@next-System:~/prueba-bandit12$ ls
+data2  data2.bin  data4.bin  data5.bin  data6  data6.bin  data8.bin  data.gz  descompresor.sh  prueba  test
+next@next-System:~/prueba-bandit12$ 7z l data8.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 79 bytes (1 KiB)
+
+Listing archive: data8.bin
+
+--
+Path = data8.bin
+Type = gzip
+Headers Size = 20
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+2023-02-21 23:02:52 .....           49           79  data9.bin
+------------------- ----- ------------ ------------  ------------------------
+2023-02-21 23:02:52                 49           79  1 files
+next@next-System:~/prueba-bandit12$ 7z z data8.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+
+
+Command Line Error:
+Unsupported command:
+z
+next@next-System:~/prueba-bandit12$ 7z x data8.bin
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=es_ES.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs AMD Ryzen 3 3200G with Radeon Vega Graphics     (810F81),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 79 bytes (1 KiB)
+
+Extracting archive: data8.bin
+--
+Path = data8.bin
+Type = gzip
+Headers Size = 20
+
+Everything is Ok
+
+Size:       49
+Compressed: 79
+next@next-System:~/prueba-bandit12$ lsd
+ data.gz   data2   data2.bin   data4.bin   data5.bin   data6   data6.bin   data8.bin   data9.bin   descompresor.sh   prueba   test
+next@next-System:~/prueba-bandit12$ cat data9.bin
+The password is wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw
+next@next-System:~/prueba-bandit12$ file data9.bin 
+data9.bin: ASCII text
+next@next-System:~/prueba-bandit12$ batcat !$
+batcat data9.bin
+───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       │ File: data9.bin
+───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1   │ The password is wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw
+───────┴──────────────────────────────────────────────────────
+next@next-System:~/prueba-bandit12$ cat descompresor.sh
+
+#!/bin/bash
+
+function ctrl_c(){
+  echo -e "\n\n[!] Saliendo...\n"
+  exit 1
+}
+
+# Ctrl+C
+trap ctrl_c INT
+
+first_file_name="data.gz"
+decompressed_file_name="$(7z l data.gz | tail -n 3 | head -n 1 | awk 'NF{print $NF}')"
+
+7z x $first_file_name &>/dev/null
+
+while [ $decompressed_file_name ]; do
+  echo -e "\n[+] Nuevo archivo descomprimido: $decompressed_file_name"
+  7z x $decompressed_file_name &>/dev/null
+  decompressed_file_name="$(7z l $decompressed_file_name 2>/dev/null | tail -n 3 | head -n 1 | awk 'NF{print $NF}')"
+done
+next@next-System:~/prueba-bandit12$ lsd
+ data.gz     data4.bin   data6.bin   descompresor.sh
+ data2       data5.bin   data8.bin   prueba
+ data2.bin   data6       data9.bin   test
+next@next-System:~/prueba-bandit12$ rm *.bin
+next@next-System:~/prueba-bandit12$ lsd
+ data.gz   data2   data6   descompresor.sh   prueba   test
+next@next-System:~/prueba-bandit12$ rm data2 data6
+next@next-System:~/prueba-bandit12$ ls
+data.gz  descompresor.sh  prueba  test
+next@next-System:~/prueba-bandit12$ ./descompresor.sh
+
+[+] Nuevo archivo descomprimido: data2.bin
+
+[+] Nuevo archivo descomprimido: data2
+
+[+] Nuevo archivo descomprimido: data4.bin
+
+[+] Nuevo archivo descomprimido: data5.bin
+
+[+] Nuevo archivo descomprimido: data6.bin
+
+[+] Nuevo archivo descomprimido: data6
+
+[+] Nuevo archivo descomprimido: data8.bin
+
+[+] Nuevo archivo descomprimido: data9.bin
+next@next-System:~/prueba-bandit12$ lsd
+ data.gz     data4.bin   data6.bin   descompresor.sh
+ data2       data5.bin   data8.bin   prueba
+ data2.bin   data6       data9.bin   test
+next@next-System:~/prueba-bandit12$ cat data9.bin
+The password is wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw
+next@next-System:~/prueba-bandit12$ 
+
+////////////////////////////////////////
+
+
+# CONTRASEÑA BANDIT 13 encontrada en bandit12
+wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw
+
+
+
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+
+BANDIT 13 a BANDIT 14
 
