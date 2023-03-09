@@ -29,7 +29,7 @@ You can specify how to merge the changes by using one of the recommended command
 
 If you're unsure which strategy to use, you can consult with your team or refer to the project's documentation to see which one is recommended for your workflow.
 
-ESPAÑOL:
+ESPAÑOL SOLUCION:
 
 El mensaje que aparece después de ejecutar el comando git pull sugiere que hay ramas divergentes y Git no puede reconciliarlas automáticamente.
 
@@ -37,3 +37,28 @@ Para resolver este problema, puedes especificar cómo fusionar los cambios utili
 
 Si no estás seguro de qué estrategia utilizar, puedes consultar con tu equipo o revisar la documentación del proyecto para ver cuál se recomienda para tu flujo de trabajo.
 
+
+
+///////////////////////////////////////////////////////////////
+
+next@next-System:~/Música/BUSCADOR-SV$-ULTIMO-BUENO/ultimos menus bash juntos/menu-bandit-sv4-haciendo$ git status
+En la rama main
+Tu rama y 'origin/main' han divergido,
+y tienen 2 y 1 commits diferentes cada una respectivamente.
+  (usa "git pull" para fusionar la rama remota en la tuya)
+
+nada para hacer commit, el árbol de trabajo está limpio
+next@next-System:~/Música/BUSCADOR-SV$-ULTIMO-BUENO/ultimos menus bash juntos/menu-bandit-sv4-haciendo$ 
+
+
+//////////////////////////////////////////////////////////////
+
+SOLUCION:
+
+git push -f
+
+El comando git push -f es una forma de forzar la actualización remota del repositorio.
+
+Normalmente, al hacer un push, Git solo permitirá que se actualicen las ramas que no tienen conflictos con la rama remota. Sin embargo, al usar git push -f, se obliga a Git a sobrescribir cualquier cambio en la rama remota, incluso si existe un conflicto. Esto puede ser útil en situaciones en las que se necesita sobrescribir una rama remota, como en el caso de una corrección crítica de un error en producción.
+
+Sin embargo, debes tener en cuenta que forzar la actualización remota con git push -f puede provocar la pérdida de datos si no se tiene cuidado. Por lo tanto, debes usarlo con precaución y solo en casos en los que estés seguro de que es necesario. También debes comunicar a tu equipo cuando hayas realizado una actualización forzada para evitar conflictos en el futuro.
