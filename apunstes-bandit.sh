@@ -275,6 +275,38 @@ while [ $decompressed_file_name ]; do
   decompressed_file_name="$(7z l $decompressed_file_name 2>/dev/null | tail -n 3 | head -n 1 | awk 'NF{print $NF}')"
 done
 
+#!/bin/bash
+
+# Define una función para manejar la señal SIGINT (Ctrl+C)
+function ctrl_c(){
+  echo -e "\n\n[!] Saliendo...\n"
+  exit 1
+}
+
+# Registra la función `ctrl_c` para manejar la señal SIGINT
+trap ctrl_c INT
+
+# Nombre del primer archivo a descomprimir
+first_file_name="data.gz"
+
+# Obtiene el nombre del archivo descomprimido a partir de la salida del comando `7z l`
+decompressed_file_name="$(7z l data.gz | tail -n 3 | head -n 1 | awk 'NF{print $NF}')"
+
+# Descomprime el primer archivo
+7z x $first_file_name &>/dev/null
+
+# Itera sobre los archivos descomprimidos
+while [ $decompressed_file_name ]; do
+  # Imprime el nombre del archivo descomprimido actual
+  echo -e "\n[+] Nuevo archivo descomprimido: $decompressed_file_name"
+
+  # Descomprime el archivo actual
+  7z x $decompressed_file_name &>/dev/null
+
+  # Obtiene el nombre del siguiente archivo descomprimido
+  decompressed_file_name="$(7z l $decompressed_file_name 2>/dev/null | tail -n 3 | head -n 1 | awk 'NF{print $NF}')"
+done
+
 # VOY POR 1H 21 DESCOMPRIMIENDO ARCHIVO hexadecimal CON SCRIPT
 # ============================
 
