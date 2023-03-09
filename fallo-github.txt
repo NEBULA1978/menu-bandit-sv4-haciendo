@@ -1,0 +1,39 @@
+next@next-System:~/Música/BUSCADOR-SV$-ULTIMO-BUENO/ultimos menus bash juntos/menu-bandit-sv4-haciendo$ git pull
+remote: Enumerating objects: 4, done.
+remote: Counting objects: 100% (4/4), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+Desempaquetando objetos: 100% (3/3), 768 bytes | 768.00 KiB/s, listo.
+Desde https://github.com/NEBULA1978/menu-bandit-sv4-haciendo
+   a8a86db..9106edb  main       -> origin/main
+ayuda: Hacer un pull sin especificar cómo reconciliar las ramas es poco
+ayuda: recomendable. Puedes eliminar este mensaje usando uno de los
+ayuda: siguientes comandos antes de tu siguiente pull:
+ayuda: 
+ayuda:   git config pull.rebase false  # hacer merge (estrategia por defecto)
+ayuda:   git config pull.rebase true   # aplicar rebase
+ayuda:   git config pull.ff only       # aplicar solo fast-forward
+ayuda: 
+ayuda: Puedes reemplazar "git config" con "git config --global" para aplicar
+ayuda: la preferencia en todos los repositorios. Puedes también pasar --rebase,
+ayuda: --no-rebase, o --ff-only en el comando para sobrescribir la configuración
+ayuda: por defecto en cada invocación.
+fatal: Necesita especificar cómo reconciliar las ramas divergentes.
+next@next-System:~/Música/BUSCADOR-SV$-ULTIMO-BUENO/ultimos menus bash juntos/menu-bandit-sv4-haciendo$ 
+
+INGLES SOLUCION:
+
+The output of the git pull command suggests that there are divergent branches and Git is unable to automatically reconcile them.
+
+You can specify how to merge the changes by using one of the recommended commands provided in the output or by specifying the merge strategy explicitly. For example, you can run git pull --rebase to apply rebasing, or git pull --no-rebase to perform a merge.
+
+If you're unsure which strategy to use, you can consult with your team or refer to the project's documentation to see which one is recommended for your workflow.
+
+ESPAÑOL:
+
+El mensaje que aparece después de ejecutar el comando git pull sugiere que hay ramas divergentes y Git no puede reconciliarlas automáticamente.
+
+Para resolver este problema, puedes especificar cómo fusionar los cambios utilizando uno de los comandos recomendados que se proporcionan en el mensaje, o especificando explícitamente la estrategia de fusión. Por ejemplo, puedes ejecutar git pull --rebase para aplicar la estrategia de rebase, o git pull --no-rebase para realizar una fusión.
+
+Si no estás seguro de qué estrategia utilizar, puedes consultar con tu equipo o revisar la documentación del proyecto para ver cuál se recomienda para tu flujo de trabajo.
+
