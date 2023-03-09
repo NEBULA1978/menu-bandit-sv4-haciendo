@@ -197,22 +197,29 @@ echo "Hola que tal" | base64
 
 # Decodificar
 echo "Hola que tal" | base64 | base64 -d
-# Quiero que me conviertas los espacios en saltos de linea con tr
+# Quiero que me conviertas los espacios en saltos de linea con tr(uno debajo del otro)
+# Solo aplica en una linea
 echo "Hola que tal" | base64 | base64 -d | tr ' ' '\n'
 # Quiero que me conviertas los espacios en saltos de linea con sed
 echo "Hola que tal" | base64 | base64 -d | sed 's/ /\n/g'
-
-# Quiero sustituir un caracter con tr la r por la g
+# Mostrar la primera linea
 ┌──(nexxt㉿kali)-[~]
 └─$ cat /etc/passwd | head -n 1
 root:x:0:0:root:/root:/usr/bin/zsh
                                                      
+# Quiero sustituir un caracter con tr la r por la g
 ┌──(nexxt㉿kali)-[~]
 └─$ cat /etc/passwd | head -n 1 | head -n 1 | tr 'r' 'g'
 goot:x:0:0:goot:/goot:/usg/bin/zsh
                                                      
 ┌──(nexxt㉿kali)-[~]
 └─$ 
+
+# SOLUCION:
+bandit10@bandit:~$ cat data.txt | base64 -d
+The password is 6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM
+bandit10@bandit:~$ 
+
 
 # ============================
 # SOLUCION bandit 11  a 12 somos bandit 11
