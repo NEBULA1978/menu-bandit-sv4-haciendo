@@ -19,7 +19,8 @@ while :; do
     #Seleccion de menu
     case $opcion in
     1)  
-        echo "Para conectarme al nivel 0 : ssh bandit0@bandit.labs.overthewire.org -p 2220
+        echo "Para conectarme al nivel 0 : 3
+        Me pide contraseña: bandit0
 "
         echo "Bandido Nivel 0 → Nivel 1
 Objetivo de nivel

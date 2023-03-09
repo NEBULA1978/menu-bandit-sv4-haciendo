@@ -46,10 +46,10 @@
 # ============
 # SOLUCION En bandit 5
 # find .
-# find .type f
+# find -type f
 # Con size le ponemos 1033c para buscar bytes
 # Con la ! le decimos que no es ejecutable
-# find .type f -readable ! -executable -size 1033c | xargs cat
+# find -type f -readable ! -executable -size 1033c | xargs cat
 
 # COMANDO sed
 # cat /etc/passwd | head -1
@@ -71,16 +71,18 @@
 
 # SOLUCION bandit 5 a 6
 # Para quitar espacios adicionales:
-# find .type f -readable ! -executable -size 1033c | xargs cat | xargs
+# find -type f -readable ! -executable -size 1033c | xargs cat | xargs
+
+# Me da error:
 # Con sed: para quitar los espacios:
-# find .type f -readable ! -executable -size 1033c | xargs cat | sed 's^*//'
+# find -type f -readable ! -executable -size 1033c | xargs cat | sed 's^* //'
 
 
 # ============
 # SOLUCION bandit 6 a 7
 # Asi me salen errores(abajo) permiso denegado
 # find / -user bandit7 -group bandit6 -size 33c
-# Quiero que los errores el stderse rediriga al dev null
+# Quiero que los errores el stderr rediriga al dev null
 # find / -user bandit7 -group bandit6 -size 33c 2>/dev/null
 # ===============
 # SOLUCION 6 a 7
@@ -158,8 +160,12 @@
 # COntamos las lineas 
 # cat data.txt | wc -l
 # Ordenamos y mostramos la linea unica SOLUCION 8 a 9
+# cat data.txt | wc -l | sort
 # cat data.txt | wc -l | sort | uniq -u
-
+# SOLUCION BUENA
+bandit8@bandit:~$ cat data.txt |  sort | uniq -u
+EN632PlfYiZbn3PhVK3XOGSlNInNE00t
+bandit8@bandit:~$ 
 # La unica linea que no se repite es como un uniq -u:
 # whith unique
 
@@ -168,9 +174,9 @@
 # SOLUCION 9 a 10
 # Esta el passwor en data.txt y esta precedida de varios ===
 # Hacemos cat a data.txt no es legible
-# strings data.txt | xargs grep "==="
+# strings data.txt | grep "==="
 # Muestrame la ultima linea tiene 4:
-# strings data.txt | xargs grep "===" | tail -n 2
+# strings data.txt | grep "===" | tail -n 1
 
 # ============
 
@@ -178,11 +184,14 @@
 # Escrimos lo mismo que arriba pero en la consola sin contador
 # strings data.txt | grep "===" | while read line; do echo "Hola: $line"; done 
 # Escrimos lo mismo que arriba pero en la consola con contador
-contador=1; strings data.txt | grep "===" | while read line; do echo "Linea $contador: $line"; let contador+=1; done | awk 'NR==4' | 'NF{print $NF}'
-# SOLUCION bandit 9  a 10
+contador=1; strings data.txt | grep "===" | while read line; do echo "Linea $contador: $line"; let contador+=1; done | awk 'NR==4{print $NF}'
+
+# ///////////////////////////////////
+# ///////////////////////////////////
 
 
 # SOLUCION bandit 10  a 11
+
 # Decodificar una cadena en base64
 echo "Hola que tal" | base64
 
@@ -307,6 +316,101 @@ while [ $decompressed_file_name ]; do
   decompressed_file_name="$(7z l $decompressed_file_name 2>/dev/null | tail -n 3 | head -n 1 | awk 'NF{print $NF}')"
 done
 
+
+Creamos un archivo test:
+Abrimos con nano e introduciomos:
+ Hola esto es una prueba
+O asi tambien:
+  echo "Hola esto es una prueba" > test
+next@next-System:~/prueba-bandit12$ cat test 
+Hola esto es una prueba
+next@next-System:~/prueba-bandit12$ cat test | awk '{print $1}'
+Hola
+next@next-System:~/prueba-bandit12$ cat test | awk '{print $2}'
+esto
+next@next-System:~/prueba-bandit12$ cat test | awk '{print $3}'
+es
+
+next@next-System:~/prueba-bandit12$ cat test | awk '{print $3}' >> test
+next@next-System:~/prueba-bandit12$ cat test 
+Hola esto es una prueba
+es
+next@next-System:~/prueba-bandit12$
+
+Con tee nos crea un copia y nos almacena la data que le indicamos:
+
+next@next-System:~/prueba-bandit12$ echo "Hola esto es" | tee prueba 
+Hola esto es
+next@next-System:~/prueba-bandit12$ lsd
+ prueba   test
+next@next-System:~/prueba-bandit12$ cat prueba
+Hola esto es
+next@next-System:~/prueba-bandit12$ 
+
+Utilizamos sponge para guardar en mismo archivo:
+next@next-System:~/prueba-bandit12$ cat test | awk '{print $2}' | sponge test
+next@next-System:~/prueba-bandit12$ cat test
+esto
+
+next@next-System:~/prueba-bandit12$ 
+
+strings:
+si esta comprimido el archivo no lo detecta
+next@next-System:~/prueba-bandit12$ lsd
+ prueba   test
+next@next-System:~/prueba-bandit12$ strings prueba
+Hola esto es
+next@next-System:~/prueba-bandit12$ strings test
+esto
+next@next-System:~/prueba-bandit12$ 
+
+Instalo
+next@next-System:~/prueba-bandit12$ 
+sudo apt install ghex
+
+.gz descomprimo con gunzip
+
+DESCOMPRIMIDOR:
+
+Nos muestra que hay dentro sin descomprimir:
+7z l archivo
+
+Para descomprimir archivo:
+7z x archivo
+
+Con file:
+Vemos el tipo de archivo que tratamos
+file archivo
+
+Si escribo :
+file data5.bin
+cat !$ (hace referencia al archivo data5.bin)
+
+Para borrar por conjunto:
+rm { data5,data6}
+
+El codigo estado 1 no es exitoso.
+El codigo estado 0 es exitoso.
+
+Tres lineas de abajo a arriba:
+7z l data.gz | tail -n 3
+
+Tres lineas de abajo a arriba filtro ultim argumento:
+7z l data.gz | tail -n 3 | awk 'NF{print $NF}'
+
+
+
+
+
+
 # VOY POR 1H 21 DESCOMPRIMIENDO ARCHIVO hexadecimal CON SCRIPT
 # ============================
+
+Existen varias herramientas de recuperación de archivos que puedes utilizar, algunas son:
+
+    TestDisk: una herramienta gratuita y de código abierto que puede recuperar particiones dañadas y archivos eliminados en sistemas de archivos diferentes, incluyendo FAT, NTFS y ext.
+
+    PhotoRec: otra herramienta gratuita y de código abierto desarrollada por el mismo equipo que TestDisk. Aunque su nombre sugiere que está diseñada para recuperar fotos, en realidad puede recuperar una amplia variedad de archivos, incluyendo documentos de texto.
+
+Es importante que detengas cualquier escritura en el disco donde se encuentra el archivo eliminado hasta que hayas intentado recuperarlo, ya que cualquier escritura adicional puede sobrescribir los datos del archivo y hacer que sea irreparable.
 

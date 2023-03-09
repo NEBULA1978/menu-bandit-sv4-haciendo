@@ -1,0 +1,79 @@
+Obtenemos la contraseña del nivel 0 para pasar al nivel 1 :
+
+ssh bandit0@bandit.labs.overthewire.org -p 2220
+
+Contraseña:
+bandit0
+
+bandit0@bandit:~$ ls
+readme
+bandit0@bandit:~$ cat readme 
+NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
+bandit0@bandit:~$ 
+
+///////////////////////////////
+
+ssh bandit1@bandit.labs.overthewire.org -p 2220
+
+Contraseña:
+rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
+
+///////////////////////////////
+
+ssh bandit2@bandit.labs.overthewire.org -p 2220
+
+Contraseña:
+aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG
+
+//////////////////////////////
+
+ssh bandit3@bandit.labs.overthewire.org -p 2220
+Contraseña:
+2EW7BBsr6aMMoJ2HjW067dm8EgX26xNe
+
+//////////////////////////////
+
+ssh bandit4@bandit.labs.overthewire.org -p 2220
+Contraseña:
+lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
+
+//////////////////////////////
+
+ssh bandit5@bandit.labs.overthewire.org -p 2220
+Contraseña:
+P4L4vucdmLnm8I7Vl7jG1ApGSfjYKqJU
+
+//////////////////////////////
+
+ssh bandit6@bandit.labs.overthewire.org -p 2220
+Contraseña:
+z7WtoNQU2XfjmMtWA8u5rN4vzqu4v99S
+
+//////////////////////////////
+
+ssh bandit7@bandit.labs.overthewire.org -p 2220
+Contraseña:
+TESKZC0XvTetK0S9xNwm25STk5iWrBvP
+
+//////////////////////////////
+
+ssh bandit8@bandit.labs.overthewire.org -p 2220
+Contraseña:
+EN632PlfYiZbn3PhVK3XOGSlNInNE00t
+
+//////////////////////////////
+
+ssh bandit9@bandit.labs.overthewire.org -p 2220
+Contraseña:
+G7w8LIi6J3kTb8A7j9LgrywtEUlyyp6s
+
+//////////////////////////////
+
+ssh bandit10@bandit.labs.overthewire.org -p 2220
+Contraseña:
+
+
+
+
+
+
