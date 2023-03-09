@@ -1,0 +1,76 @@
+Manejo de pares de claves y conexiones SSH
+
+Pasos por consola:
+cd
+cd .ssh
+lsd
+openssh
+sudo sytemctl sshd
+sudo systemctl sshd
+sudo systemctl start sshd
+sudo systemctl start ssh
+sudo start sshd
+
+Instalamos:
+sudo apt-get install openssh-server
+
+Iniciamos servicio ssh:
+sudo service ssh start
+
+Vemos el estado conexion ssh:
+sudo service ssh status
+
+Creamos conexion con nuestra maquina:
+ssh next@localhost
+
+Iniciamos servivio:
+sudo service ssh start
+ssh next@localhost
+
+lsd
+
+Fallo en el nombre borro:
+rm authorized.keys
+
+Copiamos la clave pulica a un archivo con el nombre de la frase de abajo:
+cp id_rsa.pub authorized_keys
+
+Entramos sin contraseña:
+ssh next@localhost
+
+
+/////////////////////////////////
+
+Copia clave privada
+
+ssh-copy-id -i id_rsa next@localhost
+
+Me da error porque tengo la publica wardada:
+
+El comando ssh-copy-id que utilizaste copia la clave pública (id_rsa.pub) a la lista de claves autorizadas en el archivo authorized_keys en el servidor remoto. Esto le permite conectarse al servidor remoto sin proporcionar una contraseña cada vez que se conecte a través de SSH.
+
+En este caso, parece que la clave pública ya estaba en la lista de claves autorizadas en el servidor remoto, por lo que no se pudo copiar nuevamente. Por lo tanto, al conectarte al servidor remoto a través de SSH, todavía se te solicita que proporciones la contraseña.
+
+Si no quieres ingresar la contraseña cada vez que te conectas al servidor remoto a través de SSH, deberías asegurarte de que la clave pública esté presente en la lista de claves autorizadas en el servidor remoto y que la clave privada (id_rsa) esté presente en tu máquina local.
+
+Además, asegúrate de que los permisos del archivo de clave privada (id_rsa) sean adecuados. Debería tener permisos 600 (-rw-------), lo que significa que solo el propietario puede leer y escribir en el archivo. Puedes ajustar los permisos del archivo utilizando el comando chmod.
+
+Una vez que hayas hecho esto, deberías poder conectarte al servidor remoto a través de SSH sin ingresar la contraseña cada vez.
+Ramonet Pascualet
+como borro la contraseña publica wardada que no me deja conectarme
+
+Si deseas eliminar una clave pública que ya ha sido agregada al archivo authorized_keys en el servidor remoto, puedes hacer lo siguiente:
+
+    Conéctate al servidor remoto a través de SSH con tu contraseña actual.
+
+    Abre el archivo authorized_keys en un editor de texto, como nano o vi.
+
+    Busca la línea que corresponde a la clave pública que deseas eliminar.
+
+    Elimina esa línea del archivo y guarda los cambios.
+
+    Cierra la sesión de SSH en el servidor remoto.
+
+Una vez que hayas eliminado la clave pública del archivo authorized_keys, ya no se te pedirá que ingreses una contraseña al conectarte al servidor remoto a través de SSH.
+
+Sin embargo, si no puedes conectarte al servidor remoto debido a una clave pública incorrecta, es posible que debas restablecer la contraseña del usuario en el servidor remoto y volver a agregar las claves públicas necesarias. Esto depende de la configuración específica del servidor y de cómo se han establecido las claves públicas.
