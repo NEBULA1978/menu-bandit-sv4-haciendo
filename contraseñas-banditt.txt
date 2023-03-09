@@ -85,6 +85,13 @@ JVNBBFSmZwKKOP0XbFXOoW8chDz5yVRv
 
 ssh bandit12@bandit.labs.overthewire.org -p 2220
 Contraseña:
+wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw
+
+
+//////////////////////////////
+
+ssh bandit13@bandit.labs.overthewire.org -p 2220
+Contraseña:
 
 
 
